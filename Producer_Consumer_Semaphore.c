@@ -1,11 +1,8 @@
 #include <stdio.h>
 
-int mutex = 1;
-int full = 0;
-int empty;
+int mutex = 1, full = 0, empty, size;
 int buffer[100];
-int in = 0, out = 0;
-int item;
+int in = 0, out = 0, item;
 
 void producer()
 {
@@ -21,7 +18,7 @@ void producer()
     mutex = 0;
 
     buffer[in] = item;
-    in = (in + 1) % empty;
+    in = (in + 1) % size;
 
     printf("Item %d inserted\n",item);
 
@@ -41,7 +38,7 @@ void consumer()
     mutex = 0;
 
     item = buffer[out];
-    out = (out + 1) % empty;
+    out = (out + 1) % size;
 
     printf("Item %d consumed\n",item);
 
@@ -55,7 +52,9 @@ int main()
     int choice;
 
     printf("Enter buffer size: ");
-    scanf("%d",&empty);
+    scanf("%d",&size);
+
+    empty = size;
 
     while(1)
     {
@@ -75,9 +74,6 @@ int main()
 
             case 3:
                 return 0;
-
-            default:
-                printf("Invalid choice\n");
         }
     }
 }
